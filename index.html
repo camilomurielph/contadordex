@@ -154,6 +154,12 @@
             align-items: center;
             width: 40%;
             text-align: center;
+            cursor: pointer; /* Añadido para indicar interactividad */
+            transition: transform 0.1s ease;
+        }
+        
+        .combat-side:active {
+            transform: scale(0.92); /* Animación al hacer click en el VS */
         }
 
         .combat-vs { font-weight: 900; font-size: 1.2rem; color: #555; font-style: italic; }
@@ -600,7 +606,6 @@
             div.onclick = () => {
                 document.getElementById('pkmn-input').value = name;
                 container.innerHTML = ''; 
-                // Ya no hace fetch automático para dar oportunidad de poner el PS
             };
             
             container.appendChild(div);
@@ -687,6 +692,12 @@
         updateViews();
     }
 
+    function openDetailsFromCombat(team, index) {
+        activeTeam = team;
+        currentFocusIndex = index;
+        updateViews();
+    }
+
     function updateViews() {
         viewInicio.classList.remove('active');
         viewCriaturas.classList.remove('active');
@@ -716,8 +727,11 @@
 
     // === RENDERIZAR COMBATE EN INICIO ===
     function renderCombatSection() {
-        const redActive = gameState.red.find(p => p.isActive);
-        const greenActive = gameState.green.find(p => p.isActive);
+        const redIndex = gameState.red.findIndex(p => p.isActive);
+        const redActive = redIndex !== -1 ? gameState.red[redIndex] : null;
+
+        const greenIndex = gameState.green.findIndex(p => p.isActive);
+        const greenActive = greenIndex !== -1 ? gameState.green[greenIndex] : null;
 
         const buildActiveHtml = (pkmn) => {
             if (!pkmn) return `<div class="empty-slot">?</div><span class="name" style="color:#555;">Sin Activo</span>`;
@@ -733,8 +747,13 @@
             `;
         };
 
-        document.getElementById('combat-red').innerHTML = buildActiveHtml(redActive);
-        document.getElementById('combat-green').innerHTML = buildActiveHtml(greenActive);
+        const redContainer = document.getElementById('combat-red');
+        redContainer.innerHTML = buildActiveHtml(redActive);
+        redContainer.onclick = redActive ? () => openDetailsFromCombat('red', redIndex) : null;
+
+        const greenContainer = document.getElementById('combat-green');
+        greenContainer.innerHTML = buildActiveHtml(greenActive);
+        greenContainer.onclick = greenActive ? () => openDetailsFromCombat('green', greenIndex) : null;
     }
 
     function openModal() {
@@ -788,7 +807,6 @@
                 }
             } catch (e) { console.error("Sin datos de evolución", e); }
 
-            // Si es el primer pokemon del equipo, lo marcamos activo de una vez
             const isFirst = gameState[activeTeam].length === 0;
 
             gameState[activeTeam].push({
@@ -876,7 +894,6 @@
         select.value = pkmn.status;
         select.style.borderColor = statusConfig[pkmn.status].color;
 
-        // Botón Activo Estilos
         if (pkmn.isActive) {
             btnActive.innerText = "Quitar de Activo 🔄";
             btnActive.style.backgroundColor = "#555";
@@ -911,9 +928,8 @@
     function toggleActive() {
         const pkmn = gameState[activeTeam][currentFocusIndex];
         if (pkmn.isActive) {
-            pkmn.isActive = false; // Lo apaga
+            pkmn.isActive = false; 
         } else {
-            // Apaga al resto del equipo y enciende este
             gameState[activeTeam].forEach(p => p.isActive = false);
             pkmn.isActive = true;
         }
@@ -962,12 +978,12 @@
             
             gameState[activeTeam].splice(currentFocusIndex, 1);
             
-            // Si el pokemon debilitado era el activo, avisa para cambiarlo
             if (wasActive && gameState[activeTeam].length > 0) {
                 alert('¡Tu Pokémon activo ha sido debilitado! Selecciona uno nuevo de la banca.');
             }
             
-            goBackToRoster();
+            // Volvemos al inicio para que el usuario pueda ver el cambio en el panel general si vino desde la pantalla VS
+            goHome();
         }
     }
 </script>
