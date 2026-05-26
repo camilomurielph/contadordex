@@ -40,7 +40,6 @@
             overflow: hidden;
         }
 
-        /* Ajuste de márgenes para centrar y alejar de los bordes del celular */
         #app-container {
             width: 100%;
             max-width: 400px;
@@ -66,7 +65,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Títulos Dinámicos */
         .header-container {
             width: 100%;
             display: flex;
@@ -84,7 +82,7 @@
             border: none;
             font-size: 1.5rem;
             cursor: pointer;
-            padding: 10px 15px; /* Más fácil de pulsar */
+            padding: 10px 15px; 
             margin-left: -10px;
         }
 
@@ -94,7 +92,6 @@
             text-align: center;
         }
 
-        /* Selectores de Equipo (Inicio) */
         .team-selector {
             display: flex;
             flex-direction: column;
@@ -173,7 +170,6 @@
             display: flex; align-items: center; justify-content: center; color: #555; font-size: 0.8rem;
         }
 
-        /* Botones de Acción Global */
         .btn-add {
             background-color: var(--primary-blue);
             color: white;
@@ -192,7 +188,6 @@
             gap: 8px;
         }
 
-        /* Botón Grande Estado Vacío */
         .empty-state {
             display: none;
             flex-direction: column;
@@ -232,7 +227,6 @@
             line-height: 1;
         }
 
-        /* Intercambio Rápido */
         .quick-swap-btn {
             position: absolute;
             bottom: 40px;
@@ -253,7 +247,6 @@
         .quick-swap-btn svg { width: 35px; height: 35px; fill: white; transition: transform 0.3s ease; }
         .quick-swap-btn:active svg { transform: rotate(180deg); }
 
-        /* Moneda Global */
         .btn-coin-float {
             position: absolute;
             top: 30px;
@@ -275,7 +268,6 @@
 
         .btn-coin-float:active { transform: scale(0.9); }
         
-        /* Modal Animación Moneda */
         #coin-overlay {
             display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.85); z-index: 100; justify-content: center; align-items: center; flex-direction: column;
@@ -301,10 +293,9 @@
             text-shadow: 0 2px 10px rgba(0,0,0,0.5); opacity: 0; transition: opacity 0.3s ease;
         }
         
-        /* Grid de Criaturas */
         #pokemon-grid {
             display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%;
-            overflow-y: auto; padding-bottom: 150px; /* Ampliado para los nuevos botones inferiores */
+            overflow-y: auto; padding-bottom: 150px; 
         }
 
         .pkmn-card {
@@ -349,7 +340,6 @@
             outline: none; font-weight: bold; cursor: pointer;
         }
 
-        /* Controles PS Personalizados */
         .custom-ps-row {
             display: flex; gap: 15px; align-items: center; margin-top: 5px;
         }
@@ -366,7 +356,6 @@
         .btn-minus { background-color: var(--btn-red); }
         .btn-plus { background-color: var(--btn-green); }
 
-        /* Botones de Navegación */
         .nav-buttons {
             display: flex; justify-content: space-between; width: 100%; margin-top: 20px; gap: 10px;
         }
@@ -396,7 +385,6 @@
             cursor: pointer; border-bottom: 1px solid #333;
         }
 
-        /* Texto de Créditos */
         .app-credits { font-size: 0.75rem; color: #666; margin-top: 8px; text-align: center; }
         
         .footer-container {
@@ -467,11 +455,9 @@
 
         <h2 class="combat-title">Combate</h2>
         <div class="combat-section">
-            <div class="combat-side" id="combat-red">
-                </div>
+            <div class="combat-side" id="combat-red"></div>
             <div class="combat-vs">VS</div>
-            <div class="combat-side" id="combat-green">
-                </div>
+            <div class="combat-side" id="combat-green"></div>
         </div>
         
         <div style="margin-top: auto; padding-bottom: 5px;">
@@ -541,7 +527,6 @@
         
         <div class="evo-wrapper">
             <button class="btn-evo-toggle" id="btn-active" onclick="toggleActive()">Establecer como Activo ⚔️</button>
-            
             <button class="btn-evo-toggle" id="btn-evo" onclick="toggleEvoMenu()">Evolucionar 👇</button>
             <div id="evo-menu" class="evo-dropdown-list"></div>
         </div>
@@ -584,7 +569,6 @@
     let currentFocusIndex = null;
     let isFlipping = false; 
 
-    // === SISTEMA DE AUTOCOMPLETADO ===
     let allPokemonNames = [];
 
     async function loadAllPokemonNames() {
@@ -593,7 +577,7 @@
             const data = await res.json();
             allPokemonNames = data.results.map(p => p.name);
         } catch (e) {
-            console.log("No se pudo cargar la lista completa para autocompletado");
+            console.log("Error al cargar autocompletado");
         }
     }
     
@@ -612,12 +596,10 @@
             const div = document.createElement('div');
             div.className = 'autocomplete-item';
             div.innerText = name;
-            
             div.onclick = () => {
                 document.getElementById('pkmn-input').value = name;
                 container.innerHTML = ''; 
             };
-            
             container.appendChild(div);
         });
     }
@@ -641,7 +623,6 @@
     const psInputField = document.getElementById('pkmn-ps-input');
     const evoMenu = document.getElementById('evo-menu');
 
-    // === LÓGICA DE LA MONEDA ===
     function throwCoin() {
         if(isFlipping) return;
         isFlipping = true;
@@ -678,7 +659,6 @@
         }
     }
 
-    // === NAVEGACIÓN Y VISTAS ===
     function selectTeam(team) {
         activeTeam = team;
         currentFocusIndex = null;
@@ -703,7 +683,6 @@
     }
 
     function openDetailsFromCombat(team, index) {
-        // Limpiamos el input de PS siempre que entramos a detalles
         document.getElementById('custom-ps-val').value = '';
         activeTeam = team;
         currentFocusIndex = index;
@@ -716,7 +695,6 @@
         viewDetalles.classList.remove('active');
         evoMenu.classList.remove('open');
 
-        // Actualizar datos del inicio
         document.getElementById('count-red').innerText = `${gameState.red.length} Pokémon`;
         document.getElementById('count-green').innerText = `${gameState.green.length} Pokémon`;
         renderCombatSection();
@@ -728,16 +706,13 @@
             renderDetails();
         } else {
             viewCriaturas.classList.add('active');
-            
             const titleEl = document.getElementById('team-title');
             titleEl.innerText = activeTeam === 'red' ? 'Equipo Red' : 'Equipo Green';
             titleEl.style.color = activeTeam === 'red' ? 'var(--team-red)' : 'var(--team-green)';
-            
             renderGrid();
         }
     }
 
-    // === RENDERIZAR COMBATE EN INICIO ===
     function renderCombatSection() {
         const redIndex = gameState.red.findIndex(p => p.isActive);
         const redActive = redIndex !== -1 ? gameState.red[redIndex] : null;
@@ -817,7 +792,7 @@
                         evolutions = parseEvolutionChain(chainData.chain);
                     }
                 }
-            } catch (e) { console.error("Sin datos de evolución", e); }
+            } catch (e) {}
 
             const isFirst = gameState[activeTeam].length === 0;
 
@@ -825,6 +800,7 @@
                 name: data.name,
                 image: imageUrl,
                 ps: startPS,
+                maxPS: startPS, // Registro del límite superior
                 status: 'sin estado',
                 isActive: isFirst,
                 evolutions: evolutions
@@ -858,7 +834,6 @@
             if (pkmn.status !== 'sin estado') card.style.borderColor = currentConfig.color;
 
             card.onclick = () => {
-                // Limpiamos el input de PS siempre que entramos a detalles
                 document.getElementById('custom-ps-val').value = '';
                 currentFocusIndex = index;
                 updateViews();
@@ -938,7 +913,6 @@
         }
     }
 
-    // === ACCIONES EN DETALLE ===
     function toggleActive() {
         const pkmn = gameState[activeTeam][currentFocusIndex];
         if (pkmn.isActive) {
@@ -962,7 +936,9 @@
         if (isNaN(inputVal) || inputVal <= 0) return;
         
         if (currentFocusIndex !== null) {
-            gameState[activeTeam][currentFocusIndex].ps = Math.max(0, gameState[activeTeam][currentFocusIndex].ps + (inputVal * multiplier));
+            const pkmn = gameState[activeTeam][currentFocusIndex];
+            // Se calcula sumando/restando el número digitado, con límite de no superar la vida máxima ni bajar de 0
+            pkmn.ps = Math.min(pkmn.maxPS, Math.max(0, pkmn.ps + (inputVal * multiplier)));
             renderDetails();
         }
     }
@@ -971,13 +947,31 @@
 
     async function transformPokemon(targetName) {
         evoMenu.classList.remove('open');
+        
+        // --- CÁLCULO DE DAÑO AL EVOLUCIONAR ---
+        const newMaxStr = prompt(`¿Cuántos PS máximos tiene la carta de ${targetName}?`);
+        const newMaxPS = parseInt(newMaxStr);
+        
+        if (isNaN(newMaxPS) || newMaxPS <= 0) {
+            alert('Evolución cancelada. Ingresa un número válido de PS.');
+            return;
+        }
+
         try {
             const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${targetName}`);
             if (!res.ok) throw new Error();
             const data = await res.json();
             
-            gameState[activeTeam][currentFocusIndex].name = data.name;
-            gameState[activeTeam][currentFocusIndex].image = data.sprites.other['official-artwork'].front_default || data.sprites.front_default;
+            const pkmn = gameState[activeTeam][currentFocusIndex];
+            
+            // 1. Calculamos cuánto daño en total ha recibido esta carta
+            const damageTaken = pkmn.maxPS - pkmn.ps;
+            
+            // 2. Aplicamos la nueva info y le restamos ese daño guardado
+            pkmn.name = data.name;
+            pkmn.image = data.sprites.other['official-artwork'].front_default || data.sprites.front_default;
+            pkmn.maxPS = newMaxPS;
+            pkmn.ps = Math.max(0, newMaxPS - damageTaken);
             
             renderDetails();
         } catch (e) {
