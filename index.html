@@ -40,6 +40,7 @@
             overflow: hidden;
         }
 
+        /* Ajuste de márgenes para centrar y alejar de los bordes del celular */
         #app-container {
             width: 100%;
             max-width: 400px;
@@ -47,7 +48,7 @@
             position: relative;
             display: flex;
             flex-direction: column;
-            padding: 20px;
+            padding: 40px 20px 50px 20px; 
         }
 
         .view {
@@ -83,6 +84,7 @@
             border: none;
             font-size: 1.2rem;
             cursor: pointer;
+            padding: 5px;
         }
 
         h1 {
@@ -95,15 +97,15 @@
         .team-selector {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
             width: 100%;
-            margin-top: 30px;
+            margin-top: 15px;
         }
 
         .team-card {
             background-color: var(--card-bg);
             border-radius: 20px;
-            padding: 20px;
+            padding: 15px 20px;
             display: flex;
             align-items: center;
             gap: 20px;
@@ -117,12 +119,52 @@
         .team-card.green { border-left: 5px solid var(--team-green); }
 
         .team-card img {
-            width: 70px;
-            height: 70px;
+            width: 60px;
+            height: 60px;
             image-rendering: pixelated;
         }
 
-        .team-card h2 { font-size: 1.4rem; }
+        .team-card h2 { font-size: 1.3rem; }
+
+        /* SECCIÓN COMBATE */
+        .combat-title {
+            font-size: 1rem;
+            margin-top: 25px;
+            text-align: center;
+            color: #aaa;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .combat-section {
+            margin-top: 10px;
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 15px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .combat-side {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 40%;
+            text-align: center;
+        }
+
+        .combat-vs { font-weight: 900; font-size: 1.2rem; color: #555; font-style: italic; }
+        
+        .combat-side img { width: 60px; height: 60px; object-fit: contain; filter: drop-shadow(0 4px 4px rgba(0,0,0,0.5)); }
+        .combat-side .name { font-size: 0.8rem; margin-top: 5px; font-weight: bold; text-transform: capitalize; }
+        .combat-side .ps { font-size: 0.75rem; font-weight: bold; margin-top: 2px; }
+        .combat-side .empty-slot {
+            width: 50px; height: 50px; border-radius: 50%; border: 2px dashed #555;
+            display: flex; align-items: center; justify-content: center; color: #555; font-size: 0.8rem;
+        }
 
         /* Botones de Acción Global */
         .btn-add {
@@ -184,7 +226,7 @@
         /* Intercambio Rápido */
         .quick-swap-btn {
             position: absolute;
-            bottom: 25px;
+            bottom: 40px;
             right: 20px;
             width: 60px;
             height: 60px;
@@ -199,19 +241,13 @@
             z-index: 5;
         }
 
-        .quick-swap-btn svg {
-            width: 35px;
-            height: 35px;
-            fill: white;
-            transition: transform 0.3s ease;
-        }
-
+        .quick-swap-btn svg { width: 35px; height: 35px; fill: white; transition: transform 0.3s ease; }
         .quick-swap-btn:active svg { transform: rotate(180deg); }
 
         /* Moneda Global */
         .btn-coin-float {
             position: absolute;
-            top: 15px;
+            top: 30px;
             right: 20px;
             width: 45px;
             height: 45px;
@@ -232,29 +268,14 @@
         
         /* Modal Animación Moneda */
         #coin-overlay {
-            display: none;
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            z-index: 100;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
+            display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); z-index: 100; justify-content: center; align-items: center; flex-direction: column;
         }
 
         .coin {
-            width: 120px;
-            height: 120px;
-            background: linear-gradient(135deg, #f1c40f, #d4ac0d);
-            border-radius: 50%;
-            border: 6px solid #b8960b;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 2rem;
-            font-weight: bold;
-            color: #fff;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+            width: 120px; height: 120px; background: linear-gradient(135deg, #f1c40f, #d4ac0d);
+            border-radius: 50%; border: 6px solid #b8960b; display: flex; justify-content: center; align-items: center;
+            font-size: 2rem; font-weight: bold; color: #fff; text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
             box-shadow: 0 10px 25px rgba(0,0,0,0.6), inset 0 0 15px rgba(255,255,255,0.4);
         }
 
@@ -267,278 +288,134 @@
         .flip { animation: flipAnimation 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
 
         #coin-result-text {
-            margin-top: 30px;
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: white;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            margin-top: 30px; font-size: 2.5rem; font-weight: bold; color: white;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5); opacity: 0; transition: opacity 0.3s ease;
         }
         
         /* Grid de Criaturas */
         #pokemon-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            width: 100%;
-            overflow-y: auto;
-            padding-bottom: 100px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%;
+            overflow-y: auto; padding-bottom: 120px;
         }
 
         .pkmn-card {
-            background-color: var(--card-bg);
-            border-radius: 16px;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            position: relative;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            border: 2px solid transparent;
+            background-color: var(--card-bg); border-radius: 16px; padding: 15px; display: flex; flex-direction: column;
+            align-items: center; cursor: pointer; position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: 2px solid transparent;
         }
 
-        .pkmn-card img {
-            width: 80px;
-            height: 80px;
-            object-fit: contain;
-        }
-
-        .pkmn-card span {
-            margin-top: 10px;
-            font-size: 0.9rem;
-            text-transform: capitalize;
+        .pkmn-card img { width: 80px; height: 80px; object-fit: contain; }
+        .pkmn-card span { margin-top: 10px; font-size: 0.9rem; text-transform: capitalize; }
+        
+        .active-icon {
+            position: absolute; top: -8px; left: -8px; background: var(--primary-blue);
+            color: white; border-radius: 50%; width: 24px; height: 24px; display: flex;
+            justify-content: center; align-items: center; font-size: 0.7rem; font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
         }
 
         .card-status-badge {
-            font-size: 0.65rem;
-            padding: 2px 6px;
-            border-radius: 8px;
-            margin-top: 4px;
-            text-transform: uppercase;
-            font-weight: bold;
+            font-size: 0.65rem; padding: 2px 6px; border-radius: 8px; margin-top: 4px; text-transform: uppercase; font-weight: bold;
         }
 
         /* Vista de Detalles */
         .detail-card {
-            background-color: var(--card-bg);
-            border-radius: 20px;
-            padding: 20px;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
+            background-color: var(--card-bg); border-radius: 20px; padding: 20px; width: 100%; display: flex; flex-direction: column;
+            align-items: center; position: relative;
         }
 
         .ps-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            padding: 5px 12px;
-            border-radius: 12px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            border: 1px solid transparent;
-            transition: all 0.3s ease;
+            position: absolute; top: 15px; right: 15px; padding: 5px 12px; border-radius: 12px;
+            font-weight: bold; font-size: 0.9rem; border: 1px solid transparent; transition: all 0.3s ease;
         }
 
-        .detail-card img {
-            width: 140px;
-            height: 140px;
-            object-fit: contain;
-            margin: 15px 0 5px 0;
-        }
-
-        .detail-card h2 {
-            font-size: 1.4rem;
-            text-transform: capitalize;
-            margin-bottom: 15px;
-        }
+        .detail-card img { width: 140px; height: 140px; object-fit: contain; margin: 15px 0 5px 0; }
+        .detail-card h2 { font-size: 1.4rem; text-transform: capitalize; margin-bottom: 15px; }
 
         .status-selector-wrapper {
-            width: 85%;
-            margin-bottom: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
+            width: 85%; margin-bottom: 20px; display: flex; flex-direction: column; gap: 5px;
         }
         .status-selector-wrapper label { font-size: 0.8rem; color: #aaa; }
         .status-select {
-            width: 100%;
-            padding: 10px;
-            border-radius: 10px;
-            background: #2a2d32;
-            color: white;
-            border: 2px solid var(--status-sin);
-            outline: none;
-            font-weight: bold;
-            cursor: pointer;
+            width: 100%; padding: 10px; border-radius: 10px; background: #2a2d32; color: white; border: 2px solid var(--status-sin);
+            outline: none; font-weight: bold; cursor: pointer;
         }
 
-        .controls {
-            display: flex;
-            gap: 20px;
-            margin-top: 5px;
+        /* Controles PS Personalizados */
+        .custom-ps-row {
+            display: flex; gap: 15px; align-items: center; margin-top: 5px;
+        }
+
+        .custom-ps-input {
+            width: 80px; padding: 12px; text-align: center; border-radius: 12px; border: none; background: #333; color: white;
+            font-size: 1.2rem; font-weight: bold; outline: none;
         }
 
         .btn-circle {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: none;
-            font-size: 1.5rem;
-            color: black;
-            font-weight: bold;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
+            width: 50px; height: 50px; border-radius: 50%; border: none; font-size: 1.5rem; color: black; font-weight: bold;
+            display: flex; justify-content: center; align-items: center; cursor: pointer;
         }
         .btn-minus { background-color: var(--btn-red); }
         .btn-plus { background-color: var(--btn-green); }
 
         .nav-buttons {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            margin-top: 20px;
-            gap: 10px;
+            display: flex; justify-content: space-between; width: 100%; margin-top: 20px; gap: 10px;
         }
 
         .btn-nav {
-            flex: 1;
-            background: transparent;
-            color: #888;
-            border: 1px solid #888;
-            padding: 10px;
-            border-radius: 10px;
-            cursor: pointer;
-            text-align: center;
-            font-size: 0.9rem;
+            flex: 1; background: transparent; color: #888; border: 1px solid #888; padding: 10px; border-radius: 10px;
+            cursor: pointer; text-align: center; font-size: 0.9rem;
         }
         .btn-delete { color: var(--btn-red); border-color: var(--btn-red); }
 
         .evo-wrapper {
-            width: 100%;
-            margin-top: 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            width: 100%; margin-top: 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
         }
         .btn-evo-toggle {
-            width: 100%;
-            background: #2a2d32;
-            color: #fff;
-            border: 1px solid #444;
-            padding: 10px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 0.9rem;
+            width: 100%; background: #2a2d32; color: #fff; border: 1px solid #444; padding: 12px; border-radius: 10px;
+            cursor: pointer; font-size: 0.9rem; font-weight: bold; transition: background 0.2s;
         }
         .evo-dropdown-list {
-            display: none;
-            flex-direction: column;
-            width: 100%;
-            background: #25272c;
-            border: 1px solid #444;
-            border-radius: 10px;
-            margin-top: 5px;
-            max-height: 120px;
-            overflow-y: auto;
-            z-index: 5;
+            display: none; flex-direction: column; width: 100%; background: #25272c; border: 1px solid #444; border-radius: 10px;
+            max-height: 120px; overflow-y: auto; z-index: 5;
         }
         .evo-dropdown-list.open { display: flex; }
         .evo-btn-option {
-            background: transparent;
-            border: none;
-            color: white;
-            padding: 10px;
-            text-align: left;
-            text-transform: capitalize;
-            cursor: pointer;
-            border-bottom: 1px solid #333;
+            background: transparent; border: none; color: white; padding: 10px; text-align: left; text-transform: capitalize;
+            cursor: pointer; border-bottom: 1px solid #333;
         }
 
         /* Texto de Créditos */
-        .app-credits {
-            font-size: 0.75rem;
-            color: #666;
-            margin-top: 5px;
-            text-align: center;
-        }
+        .app-credits { font-size: 0.75rem; color: #666; margin-top: 5px; text-align: center; }
         
         .footer-container {
-            position: absolute;
-            bottom: 15px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center;
         }
 
         /* Modal Añadir Pkmn y Autocompletado */
         #modal {
-            display: none;
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
+            display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8);
+            justify-content: center; align-items: center; z-index: 10;
         }
         .modal-content {
-            background-color: var(--card-bg);
-            padding: 20px;
-            border-radius: 16px;
-            width: 85%;
-            text-align: center;
+            background-color: var(--card-bg); padding: 20px; border-radius: 16px; width: 85%; text-align: center;
         }
         
-        .input-wrapper {
-            position: relative;
-            width: 100%;
-            margin: 15px 0;
-        }
+        .input-wrapper { position: relative; width: 100%; margin: 15px 0 10px 0; }
         
         .modal-content input {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: none;
-            background: #333;
-            color: white;
-            outline: none;
+            width: 100%; padding: 12px; border-radius: 8px; border: none; background: #333; color: white; outline: none; text-align: center;
         }
 
-        /* Estilos del desplegable de sugerencias */
         .autocomplete-list {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            width: 100%;
-            background: #2a2d32;
-            border-radius: 0 0 8px 8px;
-            max-height: 150px;
-            overflow-y: auto;
-            z-index: 20;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            text-align: left;
+            position: absolute; top: 100%; left: 0; width: 100%; background: #2a2d32; border-radius: 0 0 8px 8px; max-height: 150px;
+            overflow-y: auto; z-index: 20; box-shadow: 0 4px 10px rgba(0,0,0,0.5); text-align: left;
         }
         .autocomplete-item {
-            padding: 12px 15px;
-            border-bottom: 1px solid #444;
-            color: white;
-            cursor: pointer;
-            text-transform: capitalize;
-            font-size: 0.95rem;
+            padding: 12px 15px; border-bottom: 1px solid #444; color: white; cursor: pointer; text-transform: capitalize; font-size: 0.95rem;
         }
-        .autocomplete-item:last-child { border-bottom: none; }
         .autocomplete-item:hover { background-color: #3a3f45; }
 
-        .modal-buttons { display: flex; justify-content: space-between; gap: 10px; }
+        .modal-buttons { display: flex; justify-content: space-between; gap: 10px; margin-top: 15px;}
         .modal-buttons button { flex: 1; padding: 10px; border-radius: 8px; border: none; cursor: pointer; }
         .btn-confirm { background-color: var(--primary-blue); color: white; font-weight: bold; }
     </style>
@@ -575,8 +452,17 @@
                 </div>
             </div>
         </div>
+
+        <h2 class="combat-title">Combate</h2>
+        <div class="combat-section">
+            <div class="combat-side" id="combat-red">
+                </div>
+            <div class="combat-vs">VS</div>
+            <div class="combat-side" id="combat-green">
+                </div>
+        </div>
         
-        <div style="margin-top: auto; padding-bottom: 10px;">
+        <div style="margin-top: auto; padding-bottom: 5px;">
             <div class="app-credits">App por camilomuriel</div>
         </div>
     </div>
@@ -632,19 +518,23 @@
                 </select>
             </div>
 
-            <div class="controls">
-                <button class="btn-circle btn-minus" onclick="updatePS(-10)">-</button>
-                <button class="btn-circle btn-plus" onclick="updatePS(10)">+</button>
+            <label style="font-size: 0.8rem; color: #aaa; margin-top: 5px;">Modificar PS</label>
+            <div class="custom-ps-row">
+                <button class="btn-circle btn-minus" onclick="applyCustomPS(-1)">-</button>
+                <input type="number" id="custom-ps-val" class="custom-ps-input" placeholder="Cant." value="10" inputmode="numeric">
+                <button class="btn-circle btn-plus" onclick="applyCustomPS(1)">+</button>
             </div>
         </div>
         
-        <div class="nav-buttons">
-            <button class="btn-nav btn-delete" onclick="deletePokemon()">Eliminar / Debilitar</button>
-        </div>
-
         <div class="evo-wrapper">
+            <button class="btn-evo-toggle" id="btn-active" onclick="toggleActive()">Establecer como Activo ⚔️</button>
+            
             <button class="btn-evo-toggle" id="btn-evo" onclick="toggleEvoMenu()">Evolucionar 👇</button>
             <div id="evo-menu" class="evo-dropdown-list"></div>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="btn-nav btn-delete" onclick="deletePokemon()">Eliminar / Debilitar</button>
         </div>
     </div>
 
@@ -653,9 +543,11 @@
             <h3 id="modal-title">Añadir a Equipo</h3>
             
             <div class="input-wrapper">
-                <input type="text" id="pkmn-input" placeholder="Ej: Pikachu, Charizard..." autocomplete="off" oninput="handleSearchInput(event)">
+                <input type="text" id="pkmn-input" placeholder="Nombre (Ej: Pikachu)" autocomplete="off" oninput="handleSearchInput(event)">
                 <div id="autocomplete-container" class="autocomplete-list"></div>
             </div>
+            
+            <input type="number" id="pkmn-ps-input" placeholder="PS Iniciales (Ej: 60, 120...)" autocomplete="off" inputmode="numeric">
 
             <div class="modal-buttons">
                 <button class="btn-nav" onclick="closeModal()">Cancelar</button>
@@ -679,10 +571,8 @@
     // === SISTEMA DE AUTOCOMPLETADO ===
     let allPokemonNames = [];
 
-    // Carga todos los nombres de Pokémon silenciosamente al iniciar la app
     async function loadAllPokemonNames() {
         try {
-            // Llama a la API pidiendo hasta 10,000 resultados para cubrirlos todos
             const res = await fetch('https://pokeapi.co/api/v2/pokemon?limit=10000');
             const data = await res.json();
             allPokemonNames = data.results.map(p => p.name);
@@ -691,17 +581,15 @@
         }
     }
     
-    // Ejecutamos la carga apenas el script arranca
     loadAllPokemonNames();
 
     function handleSearchInput(e) {
         const val = e.target.value.toLowerCase().trim();
         const container = document.getElementById('autocomplete-container');
-        container.innerHTML = ''; // Limpiar sugerencias anteriores
+        container.innerHTML = ''; 
         
         if (!val) return;
 
-        // Filtrar coincidencias y tomar solo las primeras 6 para no saturar la pantalla
         const matches = allPokemonNames.filter(name => name.startsWith(val) || name.includes(val)).slice(0, 6);
 
         matches.forEach(name => {
@@ -709,11 +597,10 @@
             div.className = 'autocomplete-item';
             div.innerText = name;
             
-            // Al hacer clic en una sugerencia
             div.onclick = () => {
                 document.getElementById('pkmn-input').value = name;
-                container.innerHTML = ''; // Ocultar el menú desplegable
-                fetchPokemon(); // Agregar automáticamente
+                container.innerHTML = ''; 
+                // Ya no hace fetch automático para dar oportunidad de poner el PS
             };
             
             container.appendChild(div);
@@ -736,6 +623,7 @@
     const btnAddSmall = document.getElementById('btn-add-small');
     const modal = document.getElementById('modal');
     const inputField = document.getElementById('pkmn-input');
+    const psInputField = document.getElementById('pkmn-ps-input');
     const evoMenu = document.getElementById('evo-menu');
 
     // === LÓGICA DE LA MONEDA ===
@@ -805,8 +693,10 @@
         viewDetalles.classList.remove('active');
         evoMenu.classList.remove('open');
 
+        // Actualizar datos del inicio
         document.getElementById('count-red').innerText = `${gameState.red.length} Pokémon`;
         document.getElementById('count-green').innerText = `${gameState.green.length} Pokémon`;
+        renderCombatSection(); // Rellenar tablero de combate
 
         if (activeTeam === null) {
             viewInicio.classList.add('active');
@@ -824,11 +714,35 @@
         }
     }
 
+    // === RENDERIZAR COMBATE EN INICIO ===
+    function renderCombatSection() {
+        const redActive = gameState.red.find(p => p.isActive);
+        const greenActive = gameState.green.find(p => p.isActive);
+
+        const buildActiveHtml = (pkmn) => {
+            if (!pkmn) return `<div class="empty-slot">?</div><span class="name" style="color:#555;">Sin Activo</span>`;
+            const psColor = pkmn.ps <= 30 ? 'var(--btn-red)' : 'var(--btn-green)';
+            const statusHtml = pkmn.status !== 'sin estado' 
+                ? `<span style="font-size:0.6rem; margin-top:2px; color:${statusConfig[pkmn.status].color}">${pkmn.status.toUpperCase()}</span>` 
+                : '';
+            return `
+                <img src="${pkmn.image}" alt="${pkmn.name}">
+                <span class="name">${pkmn.name}</span>
+                <span class="ps" style="color: ${psColor}">${pkmn.ps} PS</span>
+                ${statusHtml}
+            `;
+        };
+
+        document.getElementById('combat-red').innerHTML = buildActiveHtml(redActive);
+        document.getElementById('combat-green').innerHTML = buildActiveHtml(greenActive);
+    }
+
     function openModal() {
         modal.style.display = 'flex';
         document.getElementById('modal-title').innerText = `Añadir a Equipo ${activeTeam === 'red' ? 'Red' : 'Green'}`;
         inputField.value = '';
-        document.getElementById('autocomplete-container').innerHTML = ''; // Limpiar sugerencias
+        psInputField.value = '';
+        document.getElementById('autocomplete-container').innerHTML = '';
         inputField.focus();
     }
 
@@ -848,7 +762,11 @@
 
     async function fetchPokemon() {
         const query = inputField.value.trim().toLowerCase();
-        if (!query) return;
+        const startPS = parseInt(psInputField.value);
+
+        if (!query) { alert('Ingresa un nombre'); return; }
+        if (isNaN(startPS) || startPS < 0) { alert('Debes ingresar los PS iniciales'); return; }
+        
         closeModal();
         
         try {
@@ -870,11 +788,15 @@
                 }
             } catch (e) { console.error("Sin datos de evolución", e); }
 
+            // Si es el primer pokemon del equipo, lo marcamos activo de una vez
+            const isFirst = gameState[activeTeam].length === 0;
+
             gameState[activeTeam].push({
                 name: data.name,
                 image: imageUrl,
-                ps: 80,
+                ps: startPS,
                 status: 'sin estado',
+                isActive: isFirst,
                 evolutions: evolutions
             });
 
@@ -915,9 +837,11 @@
                 statusBadgeHtml = `<div class="card-status-badge" style="color: ${currentConfig.color}; background: ${currentConfig.bg};">${pkmn.status}</div>`;
             }
 
+            const activeIconHtml = pkmn.isActive ? `<div class="active-icon">⚔️</div>` : '';
             const psColor = pkmn.ps <= 30 ? 'var(--btn-red)' : 'var(--btn-green)';
 
             card.innerHTML = `
+                ${activeIconHtml}
                 <img src="${pkmn.image}" alt="${pkmn.name}">
                 <span style="font-weight: 500;">${pkmn.name}</span>
                 ${statusBadgeHtml}
@@ -933,6 +857,7 @@
         const pkmn = gameState[activeTeam][currentFocusIndex];
         const select = document.getElementById('status-select');
         const psBadge = document.getElementById('detail-ps');
+        const btnActive = document.getElementById('btn-active');
         
         document.getElementById('detail-name').innerText = pkmn.name;
         document.getElementById('detail-img').src = pkmn.image;
@@ -950,6 +875,17 @@
         
         select.value = pkmn.status;
         select.style.borderColor = statusConfig[pkmn.status].color;
+
+        // Botón Activo Estilos
+        if (pkmn.isActive) {
+            btnActive.innerText = "Quitar de Activo 🔄";
+            btnActive.style.backgroundColor = "#555";
+            btnActive.style.borderColor = "#555";
+        } else {
+            btnActive.innerText = "Establecer como Activo ⚔️";
+            btnActive.style.backgroundColor = "var(--primary-blue)";
+            btnActive.style.borderColor = "var(--primary-blue)";
+        }
 
         evoMenu.innerHTML = '';
         const filteredEvos = pkmn.evolutions.filter(name => name !== pkmn.name);
@@ -971,6 +907,19 @@
         }
     }
 
+    // === ACCIONES EN DETALLE ===
+    function toggleActive() {
+        const pkmn = gameState[activeTeam][currentFocusIndex];
+        if (pkmn.isActive) {
+            pkmn.isActive = false; // Lo apaga
+        } else {
+            // Apaga al resto del equipo y enciende este
+            gameState[activeTeam].forEach(p => p.isActive = false);
+            pkmn.isActive = true;
+        }
+        renderDetails();
+    }
+
     function handleStatusChange(newStatus) {
         if (currentFocusIndex !== null) {
             gameState[activeTeam][currentFocusIndex].status = newStatus;
@@ -978,9 +927,12 @@
         }
     }
 
-    function updatePS(amount) {
+    function applyCustomPS(multiplier) {
+        const inputVal = parseInt(document.getElementById('custom-ps-val').value);
+        if (isNaN(inputVal) || inputVal <= 0) return;
+        
         if (currentFocusIndex !== null) {
-            gameState[activeTeam][currentFocusIndex].ps = Math.max(0, gameState[activeTeam][currentFocusIndex].ps + amount);
+            gameState[activeTeam][currentFocusIndex].ps = Math.max(0, gameState[activeTeam][currentFocusIndex].ps + (inputVal * multiplier));
             renderDetails();
         }
     }
@@ -1005,7 +957,16 @@
 
     function deletePokemon() {
         if (confirm('¿Debilitar o remover este Pokémon?')) {
+            const pkmn = gameState[activeTeam][currentFocusIndex];
+            const wasActive = pkmn.isActive;
+            
             gameState[activeTeam].splice(currentFocusIndex, 1);
+            
+            // Si el pokemon debilitado era el activo, avisa para cambiarlo
+            if (wasActive && gameState[activeTeam].length > 0) {
+                alert('¡Tu Pokémon activo ha sido debilitado! Selecciona uno nuevo de la banca.');
+            }
+            
             goBackToRoster();
         }
     }
