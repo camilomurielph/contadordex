@@ -82,9 +82,10 @@
             background: transparent;
             color: var(--text-color);
             border: none;
-            font-size: 1.2rem;
+            font-size: 1.5rem;
             cursor: pointer;
-            padding: 5px;
+            padding: 10px 15px; /* Más fácil de pulsar */
+            margin-left: -10px;
         }
 
         h1 {
@@ -154,12 +155,12 @@
             align-items: center;
             width: 40%;
             text-align: center;
-            cursor: pointer; /* Añadido para indicar interactividad */
+            cursor: pointer; 
             transition: transform 0.1s ease;
         }
         
         .combat-side:active {
-            transform: scale(0.92); /* Animación al hacer click en el VS */
+            transform: scale(0.92);
         }
 
         .combat-vs { font-weight: 900; font-size: 1.2rem; color: #555; font-style: italic; }
@@ -183,9 +184,11 @@
             font-weight: bold;
             box-shadow: 0 4px 15px rgba(29, 112, 245, 0.4);
             cursor: pointer;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
+            justify-content: center;
+            width: 100%;
             gap: 8px;
         }
 
@@ -301,7 +304,7 @@
         /* Grid de Criaturas */
         #pokemon-grid {
             display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%;
-            overflow-y: auto; padding-bottom: 120px;
+            overflow-y: auto; padding-bottom: 150px; /* Ampliado para los nuevos botones inferiores */
         }
 
         .pkmn-card {
@@ -363,15 +366,18 @@
         .btn-minus { background-color: var(--btn-red); }
         .btn-plus { background-color: var(--btn-green); }
 
+        /* Botones de Navegación */
         .nav-buttons {
             display: flex; justify-content: space-between; width: 100%; margin-top: 20px; gap: 10px;
         }
 
         .btn-nav {
             flex: 1; background: transparent; color: #888; border: 1px solid #888; padding: 10px; border-radius: 10px;
-            cursor: pointer; text-align: center; font-size: 0.9rem;
+            cursor: pointer; text-align: center; font-size: 0.95rem; font-weight: bold;
         }
-        .btn-delete { color: var(--btn-red); border-color: var(--btn-red); }
+        
+        .btn-ok { background-color: var(--primary-blue); color: white; border: none; }
+        .btn-delete { color: var(--btn-red); border-color: var(--btn-red); width: 100%; margin-top: 10px; }
 
         .evo-wrapper {
             width: 100%; margin-top: 12px; display: flex; flex-direction: column; align-items: center; gap: 8px;
@@ -391,10 +397,10 @@
         }
 
         /* Texto de Créditos */
-        .app-credits { font-size: 0.75rem; color: #666; margin-top: 5px; text-align: center; }
+        .app-credits { font-size: 0.75rem; color: #666; margin-top: 8px; text-align: center; }
         
         .footer-container {
-            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center;
+            position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; width: 85%;
         }
 
         /* Modal Añadir Pkmn y Autocompletado */
@@ -490,6 +496,7 @@
         
         <div class="footer-container">
             <button id="btn-add-small" class="btn-add" onclick="openModal()">+ Añadir Pkmn</button>
+            <button class="btn-nav" style="width: 100%; border-color: #555; color: #aaa;" onclick="goHome()">◀ Volver a Combate</button>
             <div class="app-credits">App por camilomuriel</div>
         </div>
 
@@ -527,7 +534,7 @@
             <label style="font-size: 0.8rem; color: #aaa; margin-top: 5px;">Modificar PS</label>
             <div class="custom-ps-row">
                 <button class="btn-circle btn-minus" onclick="applyCustomPS(-1)">-</button>
-                <input type="number" id="custom-ps-val" class="custom-ps-input" placeholder="Cant." value="10" inputmode="numeric">
+                <input type="number" id="custom-ps-val" class="custom-ps-input" placeholder="Cant." inputmode="numeric">
                 <button class="btn-circle btn-plus" onclick="applyCustomPS(1)">+</button>
             </div>
         </div>
@@ -540,8 +547,11 @@
         </div>
 
         <div class="nav-buttons">
-            <button class="btn-nav btn-delete" onclick="deletePokemon()">Eliminar / Debilitar</button>
+            <button class="btn-nav" onclick="goBackToRoster()">◀ Atrás</button>
+            <button class="btn-nav btn-ok" onclick="goHome()">Ok ✓</button>
         </div>
+        <button class="btn-nav btn-delete" onclick="deletePokemon()">Eliminar / Debilitar</button>
+
     </div>
 
     <div id="modal">
@@ -693,6 +703,8 @@
     }
 
     function openDetailsFromCombat(team, index) {
+        // Limpiamos el input de PS siempre que entramos a detalles
+        document.getElementById('custom-ps-val').value = '';
         activeTeam = team;
         currentFocusIndex = index;
         updateViews();
@@ -707,7 +719,7 @@
         // Actualizar datos del inicio
         document.getElementById('count-red').innerText = `${gameState.red.length} Pokémon`;
         document.getElementById('count-green').innerText = `${gameState.green.length} Pokémon`;
-        renderCombatSection(); // Rellenar tablero de combate
+        renderCombatSection();
 
         if (activeTeam === null) {
             viewInicio.classList.add('active');
@@ -846,6 +858,8 @@
             if (pkmn.status !== 'sin estado') card.style.borderColor = currentConfig.color;
 
             card.onclick = () => {
+                // Limpiamos el input de PS siempre que entramos a detalles
+                document.getElementById('custom-ps-val').value = '';
                 currentFocusIndex = index;
                 updateViews();
             };
@@ -982,7 +996,6 @@
                 alert('¡Tu Pokémon activo ha sido debilitado! Selecciona uno nuevo de la banca.');
             }
             
-            // Volvemos al inicio para que el usuario pueda ver el cambio en el panel general si vino desde la pantalla VS
             goHome();
         }
     }
