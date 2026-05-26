@@ -143,7 +143,7 @@
 
         /* Botón Grande Estado Vacío */
         .empty-state {
-            display: none; /* Se activa con JS */
+            display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -207,6 +207,74 @@
         }
 
         .quick-swap-btn:active svg { transform: rotate(180deg); }
+
+        /* Moneda Global */
+        .btn-coin-float {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #f1c40f, #d4ac0d);
+            border: 2px solid #b8960b;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            z-index: 10;
+            font-size: 1.5rem;
+            transition: transform 0.1s ease;
+        }
+
+        .btn-coin-float:active { transform: scale(0.9); }
+        
+        /* Modal Animación Moneda */
+        #coin-overlay {
+            display: none;
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .coin {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #f1c40f, #d4ac0d);
+            border-radius: 50%;
+            border: 6px solid #b8960b;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6), inset 0 0 15px rgba(255,255,255,0.4);
+        }
+
+        @keyframes flipAnimation {
+            0% { transform: rotateX(0deg) scale(1); }
+            50% { transform: rotateX(1080deg) scale(1.4); } 
+            100% { transform: rotateX(2160deg) scale(1); }  
+        }
+
+        .flip { animation: flipAnimation 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+
+        #coin-result-text {
+            margin-top: 30px;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
         
         /* Grid de Criaturas */
         #pokemon-grid {
@@ -411,7 +479,7 @@
             align-items: center;
         }
 
-        /* Modal */
+        /* Modal Añadir Pkmn y Autocompletado */
         #modal {
             display: none;
             position: absolute;
@@ -428,16 +496,48 @@
             width: 85%;
             text-align: center;
         }
+        
+        .input-wrapper {
+            position: relative;
+            width: 100%;
+            margin: 15px 0;
+        }
+        
         .modal-content input {
             width: 100%;
             padding: 12px;
-            margin: 15px 0;
             border-radius: 8px;
             border: none;
             background: #333;
             color: white;
             outline: none;
         }
+
+        /* Estilos del desplegable de sugerencias */
+        .autocomplete-list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: #2a2d32;
+            border-radius: 0 0 8px 8px;
+            max-height: 150px;
+            overflow-y: auto;
+            z-index: 20;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            text-align: left;
+        }
+        .autocomplete-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid #444;
+            color: white;
+            cursor: pointer;
+            text-transform: capitalize;
+            font-size: 0.95rem;
+        }
+        .autocomplete-item:last-child { border-bottom: none; }
+        .autocomplete-item:hover { background-color: #3a3f45; }
+
         .modal-buttons { display: flex; justify-content: space-between; gap: 10px; }
         .modal-buttons button { flex: 1; padding: 10px; border-radius: 8px; border: none; cursor: pointer; }
         .btn-confirm { background-color: var(--primary-blue); color: white; font-weight: bold; }
@@ -446,6 +546,14 @@
 <body>
 
 <div id="app-container">
+
+    <button class="btn-coin-float" onclick="throwCoin()">🪙</button>
+
+    <div id="coin-overlay" onclick="closeCoin()">
+        <div id="coin-anim" class="coin">?</div>
+        <div id="coin-result-text"></div>
+        <div id="coin-close-hint" style="margin-top: 25px; font-size: 0.9rem; color: #aaa; opacity: 0; transition: opacity 0.3s;">Toca para cerrar</div>
+    </div>
     
     <div id="view-inicio" class="view active">
         <h1>Selecciona un Equipo</h1>
@@ -543,7 +651,12 @@
     <div id="modal">
         <div class="modal-content">
             <h3 id="modal-title">Añadir a Equipo</h3>
-            <input type="text" id="pkmn-input" placeholder="Ej: Pikachu, Charizard..." autocomplete="off">
+            
+            <div class="input-wrapper">
+                <input type="text" id="pkmn-input" placeholder="Ej: Pikachu, Charizard..." autocomplete="off" oninput="handleSearchInput(event)">
+                <div id="autocomplete-container" class="autocomplete-list"></div>
+            </div>
+
             <div class="modal-buttons">
                 <button class="btn-nav" onclick="closeModal()">Cancelar</button>
                 <button class="btn-confirm" onclick="fetchPokemon()">Añadir</button>
@@ -561,6 +674,51 @@
     
     let activeTeam = null; 
     let currentFocusIndex = null;
+    let isFlipping = false; 
+
+    // === SISTEMA DE AUTOCOMPLETADO ===
+    let allPokemonNames = [];
+
+    // Carga todos los nombres de Pokémon silenciosamente al iniciar la app
+    async function loadAllPokemonNames() {
+        try {
+            // Llama a la API pidiendo hasta 10,000 resultados para cubrirlos todos
+            const res = await fetch('https://pokeapi.co/api/v2/pokemon?limit=10000');
+            const data = await res.json();
+            allPokemonNames = data.results.map(p => p.name);
+        } catch (e) {
+            console.log("No se pudo cargar la lista completa para autocompletado");
+        }
+    }
+    
+    // Ejecutamos la carga apenas el script arranca
+    loadAllPokemonNames();
+
+    function handleSearchInput(e) {
+        const val = e.target.value.toLowerCase().trim();
+        const container = document.getElementById('autocomplete-container');
+        container.innerHTML = ''; // Limpiar sugerencias anteriores
+        
+        if (!val) return;
+
+        // Filtrar coincidencias y tomar solo las primeras 6 para no saturar la pantalla
+        const matches = allPokemonNames.filter(name => name.startsWith(val) || name.includes(val)).slice(0, 6);
+
+        matches.forEach(name => {
+            const div = document.createElement('div');
+            div.className = 'autocomplete-item';
+            div.innerText = name;
+            
+            // Al hacer clic en una sugerencia
+            div.onclick = () => {
+                document.getElementById('pkmn-input').value = name;
+                container.innerHTML = ''; // Ocultar el menú desplegable
+                fetchPokemon(); // Agregar automáticamente
+            };
+            
+            container.appendChild(div);
+        });
+    }
 
     const statusConfig = {
         'sin estado': { color: '#888888', bg: 'transparent' },
@@ -580,6 +738,44 @@
     const inputField = document.getElementById('pkmn-input');
     const evoMenu = document.getElementById('evo-menu');
 
+    // === LÓGICA DE LA MONEDA ===
+    function throwCoin() {
+        if(isFlipping) return;
+        isFlipping = true;
+
+        const overlay = document.getElementById('coin-overlay');
+        const coin = document.getElementById('coin-anim');
+        const resultText = document.getElementById('coin-result-text');
+        const closeHint = document.getElementById('coin-close-hint');
+        
+        overlay.style.display = 'flex';
+        resultText.style.opacity = '0';
+        closeHint.style.opacity = '0';
+        coin.innerText = '?';
+        
+        coin.classList.remove('flip');
+        void coin.offsetWidth; 
+        coin.classList.add('flip');
+        
+        const isCara = Math.random() < 0.5;
+        const resultStr = isCara ? 'CARA' : 'CRUZ';
+        
+        setTimeout(() => {
+            coin.innerText = resultStr;
+            resultText.innerText = `¡Es ${resultStr}!`;
+            resultText.style.opacity = '1';
+            closeHint.style.opacity = '1';
+            isFlipping = false;
+        }, 1500); 
+    }
+
+    function closeCoin() {
+        if(!isFlipping) {
+            document.getElementById('coin-overlay').style.display = 'none';
+        }
+    }
+
+    // === NAVEGACIÓN Y VISTAS ===
     function selectTeam(team) {
         activeTeam = team;
         currentFocusIndex = null;
@@ -632,9 +828,14 @@
         modal.style.display = 'flex';
         document.getElementById('modal-title').innerText = `Añadir a Equipo ${activeTeam === 'red' ? 'Red' : 'Green'}`;
         inputField.value = '';
+        document.getElementById('autocomplete-container').innerHTML = ''; // Limpiar sugerencias
         inputField.focus();
     }
-    function closeModal() { modal.style.display = 'none'; }
+
+    function closeModal() { 
+        modal.style.display = 'none'; 
+        document.getElementById('autocomplete-container').innerHTML = '';
+    }
 
     function parseEvolutionChain(chainObj, resultList = []) {
         if (!chainObj) return resultList;
@@ -686,7 +887,6 @@
     function renderGrid() {
         const roster = gameState[activeTeam];
         
-        // Lógica de visualización del estado vacío vs listado
         if (roster.length === 0) {
             emptyState.style.display = 'flex';
             grid.style.display = 'none';
